@@ -120,8 +120,15 @@ if (length(missing_cols) > 0) {
 }
 
 # add optional columns if absent
-if (!"label" %in% colnames(manifest)) manifest$label <- ""
-if (!"color" %in% colnames(manifest)) manifest$color <- ""
+if (!"label"    %in% colnames(manifest)) manifest$label    <- ""
+if (!"color"    %in% colnames(manifest)) manifest$color    <- ""
+if (!"fai_path" %in% colnames(manifest)) manifest$fai_path <- ""
+
+# read.csv may return NA for blank character fields depending on R configuration;
+# coerce all three optional columns to "" so downstream ifelse() works correctly
+manifest$fai_path <- ifelse(is.na(manifest$fai_path), "", manifest$fai_path)
+manifest$label    <- ifelse(is.na(manifest$label),    "", manifest$label)
+manifest$color    <- ifelse(is.na(manifest$color),    "", manifest$color)
 
 # ── assign per-row visual traits ──────────────────────────────────────────────
 
@@ -155,6 +162,10 @@ manifest$label <- ifelse(
   trimws(manifest$label),
   paste(manifest$sample, manifest$haplotype)
 )
+
+cat("Manifest loaded:", nrow(manifest), "rows,",
+    sum(nzchar(trimws(manifest$fai_path))), "with fai_path filled in\n")
+cat("Unique labels:", length(unique(manifest$label)), "\n")
 
 # ── resolve fai paths ─────────────────────────────────────────────────────────
 manifest_dir <- dirname(normalizePath(manifest_file, mustWork = FALSE))
