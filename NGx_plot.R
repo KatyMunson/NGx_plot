@@ -199,10 +199,19 @@ process_fai_ng <- function(fai_file, label, genome_size) {
   cumulative     <- cumsum(contig_lengths)
   percent        <- cumulative / genome_size * 100
   keep           <- percent <= 100
-  data.frame(
-    percentage    = percent[keep],
-    contig_length = contig_lengths[keep],
-    label         = label
+  # Prepend a sentinel point at x=0 so geom_step(direction="vh") draws the
+  # first horizontal segment from x=0 to the first cumulative percentage.
+  rbind(
+    data.frame(
+      percentage    = 0,
+      contig_length = contig_lengths[1],
+      label         = label
+    ),
+    data.frame(
+      percentage    = percent[keep],
+      contig_length = contig_lengths[keep],
+      label         = label
+    )
   )
 }
 
