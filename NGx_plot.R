@@ -300,6 +300,5 @@ p <- ggplot(plot_data,
   theme_minimal() +
   ggtitle(plot_title)
 
-print(p)
 ggsave(output_file, p, width = plot_width, height = plot_height, units = "in")
 cat("Plot saved to:", output_file, "\n")
