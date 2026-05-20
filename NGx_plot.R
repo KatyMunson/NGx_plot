@@ -199,6 +199,14 @@ process_fai_ng <- function(fai_file, label, genome_size) {
   cumulative     <- cumsum(contig_lengths)
   percent        <- cumulative / genome_size * 100
   keep           <- percent <= 100
+  # If the assembly is larger than genome_size, the cumulative sum crosses 100%
+  # at some contig.  Include that contig but clamp its percentage to 100 so the
+  # curve reaches the right edge of the plot instead of stopping short.
+  first_over <- which(!keep)[1]
+  if (!is.na(first_over)) {
+    keep[first_over]    <- TRUE
+    percent[first_over] <- 100
+  }
   # Prepend a sentinel point at x=0 so geom_step(direction="vh") draws the
   # first horizontal segment from x=0 to the first cumulative percentage.
   rbind(
