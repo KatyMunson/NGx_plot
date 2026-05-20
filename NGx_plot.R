@@ -198,15 +198,6 @@ process_fai_ng <- function(fai_file, label, genome_size) {
   contig_lengths <- sort(as.numeric(fai_data$V2), decreasing = TRUE)
   cumulative     <- cumsum(contig_lengths)
   percent        <- cumulative / genome_size * 100
-  keep           <- percent <= 100
-  # If the assembly is larger than genome_size, the cumulative sum crosses 100%
-  # at some contig.  Include that contig but clamp its percentage to 100 so the
-  # curve reaches the right edge of the plot instead of stopping short.
-  first_over <- which(!keep)[1]
-  if (!is.na(first_over)) {
-    keep[first_over]    <- TRUE
-    percent[first_over] <- 100
-  }
   # Prepend a sentinel point at x=0 so geom_step(direction="vh") draws the
   # first horizontal segment from x=0 to the first cumulative percentage.
   rbind(
@@ -216,8 +207,8 @@ process_fai_ng <- function(fai_file, label, genome_size) {
       label         = label
     ),
     data.frame(
-      percentage    = percent[keep],
-      contig_length = contig_lengths[keep],
+      percentage    = percent,
+      contig_length = contig_lengths,
       label         = label
     )
   )
@@ -301,8 +292,9 @@ p <- ggplot(plot_data,
   scale_linewidth_manual(values = grade_lw_final, guide = "none") +
   scale_linetype_manual(values = hap_lt_final) +
   scale_x_continuous("Percentage of genome size (%)",
-                     breaks = seq(0, 100, by = 10),
-                     limits = c(0, 100)) +
+                     breaks = seq(0, ceiling(max(plot_data$percentage) / 10) * 10,
+                                  by = 10),
+                     limits = c(0, NA)) +
   scale_y_continuous("Contig length (Mbp)",
                      labels = function(x) number(x / 1e6, accuracy = 1)) +
   theme_minimal() +
