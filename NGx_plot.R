@@ -163,6 +163,15 @@ manifest$label <- ifelse(
   paste(manifest$sample, manifest$haplotype)
 )
 
+# ── check for duplicate labels ────────────────────────────────────────────────
+dup_labels <- unique(manifest$label[duplicated(manifest$label)])
+if (length(dup_labels) > 0) {
+  stop("Duplicate labels found in manifest — each row must have a unique label.\n",
+       "Duplicated label(s):\n",
+       paste0("  ", dup_labels, collapse = "\n"), "\n",
+       "Set an explicit 'label' column in the CSV to disambiguate.")
+}
+
 cat("Manifest loaded:", nrow(manifest), "rows,",
     sum(nzchar(trimws(manifest$fai_path))), "with fai_path filled in\n")
 cat("Unique labels:", length(unique(manifest$label)), "\n")
