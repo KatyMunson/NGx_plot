@@ -238,6 +238,9 @@ label_meta <- manifest[!duplicated(manifest$label),
                        c("label", "grade", "color", "alpha", "haplotype")]
 
 plot_data <- merge(all_data_ng, label_meta, by = "label", all.x = TRUE)
+# base::merge() does not preserve row order within each label group; sort so
+# geom_step connects points in ascending x order instead of drawing backwards.
+plot_data <- plot_data[order(plot_data$label, plot_data$percentage), ]
 
 # ── factor levels ─────────────────────────────────────────────────────────────
 # Grade: config order first, then any extra grades found in data
