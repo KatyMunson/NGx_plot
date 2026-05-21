@@ -303,7 +303,7 @@ p <- ggplot(plot_data,
   scale_alpha_manual(values = alpha_vec, guide = "none") +
   scale_linewidth_manual(values = grade_lw_final, guide = "none") +
   scale_linetype_manual(values = hap_lt_final) +
-  scale_x_continuous("Percentage of genome size (%)",
+  scale_x_continuous("Percentage of reference genome size (%)",
                      breaks = seq(0, ceiling(max(plot_data$percentage) / 10) * 10,
                                   by = 10),
                      limits = c(0, NA)) +
