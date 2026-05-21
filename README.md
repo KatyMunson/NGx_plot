@@ -12,6 +12,18 @@ R packages (install once via `install.packages`):
 install.packages(c("ggplot2", "dplyr", "scales"))
 ```
 
+## Quick start
+
+Clone the repository and run:
+
+```bash
+Rscript NGx_plot.R manifest.csv
+```
+
+This uses the FAI files in `fai_files/` to produce `NGx_plot.pdf` in the current directory.
+
+![Example NG(x) plot](img/example_output.png)
+
 ## Usage
 
 ```bash
@@ -31,7 +43,7 @@ A comma-separated file where each row describes one assembly. The `fai_path` col
 | `sample` | ✅ | Sample identifier used for legend grouping and color lookup |
 | `haplotype` | ✅ | Haplotype identifier (e.g. `hap1`, `hap2`); controls line type |
 | `grade` | ✅ | Assembly quality tier; controls line width and alpha. See `NGx_plot.conf` for defined grades |
-| `fai_path` | ✅* | Path to the `.fai` file. Relative paths are resolved from the directory containing `manifest.csv`. *Leave blank in the committed file; fill in locally before running |
+| `fai_path` | ✅ | Path to the `.fai` file. Relative paths are resolved from the directory containing `manifest.csv`. |
 | `label` | ➖ | Legend label for this assembly. Empty → auto-built as `"<sample> <haplotype>"` |
 | `color` | ➖ | Hex color override for this specific row. Empty → look up `sample.<name>` in `NGx_plot.conf`, then the grade's default color |
 
@@ -96,4 +108,6 @@ Visual encoding:
 |------|-------------|
 | `NGx_plot.R` | Main script |
 | `NGx_plot.conf` | Visual and output configuration (edit to customise) |
-| `manifest.csv` | Assembly manifest for SMaHT DSA + HPRC + reference genomes (`fai_path` column is blank; fill in locally) |
+| `manifest.csv` | Assembly manifest (T2T-CHM13, hg38, HPRC r1 & r2 samples; ready to run) |
+| `fai_files/` | FASTA index files for the assemblies listed in `manifest.csv` |
+| `img/example_output.png` | Example output image (shown in this README) |
