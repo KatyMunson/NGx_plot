@@ -52,7 +52,7 @@ A comma-separated file where each row describes one assembly. The `fai_path` col
 2. `sample.<name>` entry in `NGx_plot.conf`
 3. `grade.<name>` color in `NGx_plot.conf`
 
-See `manifest.csv` for a worked example covering reference genomes, benchmarking assemblies, production SMaHT assemblies, and HPRC samples.
+See `manifest.csv` for a worked example covering reference genomes (T2T-CHM13, hg38) and HPRC r1 & r2 samples.
 
 ### FAI files
 
